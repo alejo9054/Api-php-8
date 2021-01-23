@@ -61,8 +61,9 @@ class User extends Authenticatable
     {
         return Str::random(40);
     }
+
     public function esAdministrador()
     {
-        return $this->admin == User::USUARIO_ADMINISTRADOR
+        return $this->admin == User::USUARIO_ADMINISTRADOR;
     }
 }

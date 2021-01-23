@@ -4,6 +4,8 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use App\Models\Product;
+use App\Models\Buyer;
 
 class Transaction extends Model
 {
@@ -14,6 +16,19 @@ class Transaction extends Model
         'buyer_id',
         'product_id',
     ];
+    /**
+     * una transaccion tiene claves foraneas de comprador y producto por lo tanto una transaccion pertenece a un comprador y un producto
+     */
+
+    public function buyer()
+    {
+        return $this->belongsTo(Buyer::class);
+    }
+
+    public function product()
+    {
+        return $this->belongsTo(Product::class);
+    }
 
 
 
