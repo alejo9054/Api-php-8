@@ -4,6 +4,9 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use App\Models\Seller;
+use App\Models\Transaction;
+use App\Models\Category;
 
 class Product extends Model
 {
@@ -25,6 +28,7 @@ class Product extends Model
     }
     /**
      * los productos pertenecen a un vendedor
+     * como solo tiene un vendedor se pone en singular(ver que las demas relaciones estan en plural)
      */
 
      public function seller()
