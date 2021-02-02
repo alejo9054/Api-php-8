@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\User;
 
 use App\Http\Controllers\Controller;
+use App\Models\User;
 use Illuminate\Http\Request;
 
 class UserController extends Controller
@@ -14,17 +15,11 @@ class UserController extends Controller
      */
     public function index()
     {
-        //
-    }
+        //lista completa de usuarios disponibles en la base de datos
+        $usuarios = User::all();
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
+       /* return $usuarios; // funciona pero es mejor meter los datos en u elemento raiz(en esta caso será data)*/
+       return response()->json(['data'=>$usuarios], 200);
     }
 
     /**
@@ -45,17 +40,6 @@ class UserController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function show($id)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
     {
         //
     }

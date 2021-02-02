@@ -31,8 +31,8 @@ class TransactionFactory extends Factory
         $vendedor = Seller::has('products')->get()->random();
         $comprador = User::all()->except($vendedor->id)->random();
         return [
-            'name' => $this->faker->word,
-            'quantity' => $this->faker->randomElement(1,3),
+            
+            'quantity' => $this->faker->numberBetween(1,3),
             'buyer_id' => $comprador->id,
             'product_id' => $vendedor->products->random()->id,
         ];

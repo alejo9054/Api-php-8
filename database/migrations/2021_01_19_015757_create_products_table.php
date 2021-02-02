@@ -15,13 +15,13 @@ class CreateProductsTable extends Migration
     public function up()
     {
         Schema::create('products', function (Blueprint $table) {
-            $table->id();
+            $table->id('id');
             $table->string('name');
             $table->string('description',1000);#tiene un valor maximo de caracteres de 1000
             $table->integer('quantity')->unsigned();
             $table->string('status')->default(Product::PRODUCTO_NO_DISPONIBLE);
             $table->string('image');
-            $table->integer('seller_id')->unsigned();
+            $table->unsignedBigInteger('seller_id')->unsigned();
             
             $table->timestamps();
 /**
@@ -29,6 +29,13 @@ class CreateProductsTable extends Migration
  */
             $table->foreign('seller_id')->references('id')->on('users');
         });
+        /*Schema::enableForeignKeyConstraints();*/
+
+       /* Schema::table('products', function (Blueprint $table){
+            
+        });*/
+            
+        
     }
 
     /**
@@ -38,6 +45,8 @@ class CreateProductsTable extends Migration
      */
     public function down()
     {
+        /*Schema::disableForeignKeyConstraints();*/
         Schema::dropIfExists('products');
+        /*Schema::enableForeignKeyConstraints();*/
     }
 }

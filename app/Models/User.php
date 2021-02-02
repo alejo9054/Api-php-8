@@ -18,6 +18,8 @@ class User extends Authenticatable
     const USUARIO_ADMINISTRADOR = 'true';
     const USUARIO_REGULAR = 'false';
 
+    protected $table = 'users';//esta linea agrega a los modelos extendidos la tabla users para ellos.
+
     /**
      * The attributes that are mass assignable.
      *
