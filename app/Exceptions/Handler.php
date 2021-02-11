@@ -8,6 +8,7 @@ use Illuminate\Validation\ValidationException;
 use Throwable;
 
 use App\Traits\ApiResponser;
+use Illuminate\Auth\AuthenticationException;
 
 class Handler extends ExceptionHandler
 {
@@ -45,12 +46,15 @@ class Handler extends ExceptionHandler
     
     public function render($request, Throwable $exception)
     {
-        if ($exception instanceof ValidationException) {
+        if ($exception instanceof ValidationException) {//exception error when data were no sent in a request
             return $this->convertValidationExceptionToResponse($exception, $request);
         }
-        if ($exception instanceof ModelNotFoundException) {
+        if ($exception instanceof ModelNotFoundException) {//exception error when are not instances with x id in database
             $modelo = class_basename($exception->getModel());
-            return $this->errorResponse("No existe ninguna nnstancia de {$modelo} con el id espeficico", 404);
+            return $this->errorResponse("No existe ninguna instancia de {$modelo} con el id espeficico", 404);
+        }
+        if ($exception instanceof AuthenticationException) {// exception error in autentication
+            return $this->unauthenticated($request, $exception);
         }
         return parent::render($request, $exception);
     }
@@ -69,6 +73,18 @@ class Handler extends ExceptionHandler
         $errors = $e->validator->errors()->getMessages();
  
         return $this->errorResponse($errors, 422);
+    }
+    /**
+     * convert an autentication exception into an unauthenticated response.
+     * 
+     * @param \Illuminate\Http\Request $request
+     * @param \Illuminate\Auth\AuthenticationException $exception
+     * @return \Illuminate\Http\Response
+     */
+
+    protected function unauthenticated($request, AuthenticationException $exception)
+    {
+        return $this->errorResponse('No autenticated', 401);
     }
  
 
