@@ -62,12 +62,12 @@ class UserController extends ApiController
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(User $user)// aqui $user debe llamarse igual que la instancia, es decir, no podemos poner $usuario
     {
         //muestra un usuario especifico para un id especifico
-        $usuario = User::findOrFail($id);// ayuda a mostrar un error en caso de que el usuario no exista
+        //$usuario = User::findOrFail($id);// ayuda a mostrar un error en caso de que el usuario no exista
 
-        return $this->showOne($usuario);
+        return $this->showOne($user);
     }
 
     /**
@@ -77,9 +77,9 @@ class UserController extends ApiController
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)//recordar que las acctualizaciones se hacen por el metodo put y por x-www-form-urlencoded
+    public function update(Request $request, User $user)//recordar que las acctualizaciones se hacen por el metodo put y por x-www-form-urlencoded// User $user agregando a inyeccion implicita del modelo
     {
-        $user = User::findOrFail($id);//guardamos la id del usuario en una variable
+        //$user = User::findOrFail($id);//guardamos la id del usuario en una variable
         // definimos las reglas
         $rules = [
             'email' => 'email|unique:users,email,' . $user->id,//se agrega tambn la exepcion de su propio email 
@@ -128,10 +128,10 @@ class UserController extends ApiController
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(User $user)// inyeccion del modelo
     {
         //
-        $user = User::findOrFail($id);
+        //$user = User::findOrFail($id);
         $user->delete();
         return $this->showOne($user);
     }
