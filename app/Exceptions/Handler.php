@@ -8,7 +8,13 @@ use Illuminate\Validation\ValidationException;
 use Throwable;
 
 use App\Traits\ApiResponser;
+use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Auth\AuthenticationException;
+use Illuminate\Database\QueryException;
+use Symfony\Component\HttpKernel\Exception\HttpException;
+use Symfony\Component\HttpKernel\Exception\MethodNotAllowedHttpException;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+//use Symfony\Component\Routing\Exception\MethodNotAllowedException;
 
 class Handler extends ExceptionHandler
 {
@@ -56,7 +62,33 @@ class Handler extends ExceptionHandler
         if ($exception instanceof AuthenticationException) {// exception error in autentication
             return $this->unauthenticated($request, $exception);
         }
-        return parent::render($request, $exception);
+        if ($exception instanceof AuthorizationException){// exception error when user does not have Authorization
+            return $this->errorResponse('No posee permisos para ejecutar esta acción', 403);
+        }
+        if ($exception instanceof NotFoundHttpException){// exception error when URL is not found
+            return $this->errorResponse('No se encontro la URL especificada', 404);
+        }
+        if ($exception instanceof MethodNotAllowedHttpException){// exception error when Method is not allowed
+            return $this->errorResponse("El método ".$request->method()." especificado en la petición no es válido", 405);
+        }
+        if ($exception instanceof HttpException){// exception error to general proposes 
+            return $this->errorResponse($exception->getMessage(), $exception->getStatusCode());
+        }
+        if ($exception instanceof QueryException){// exception error to Query exception  
+            //dd($exception) nos ayuda a depurar valores, ver(Manejando la Eliminacion de recursos Relacionados)
+            $code = $exception->errorInfo[1];
+            if ($code == 1451){
+                return $this->errorResponse('No se puede eliminar de forma permanente el recurso porque está relacionado con algún otro.', 409);
+            }
+            
+        }
+        
+        if (config('app.debug')){
+            return parent::render($request, $exception);
+        }
+        
+        return $this->errorResponse('Falla inesperada. Intente luego',500);
+        
     }
  
  
