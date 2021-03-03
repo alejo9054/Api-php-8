@@ -19,6 +19,7 @@ class CreateTransactionsTable extends Migration
             $table->unsignedBigInteger('buyer_id')->unsigned();
             $table->unsignedBigInteger('product_id')->unsigned();
             $table->timestamps();
+            $table->softDeletes();
 
             /**
              * Recordar que buyer_id y product_id son claves foraneas
